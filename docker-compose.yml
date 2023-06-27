@@ -1,0 +1,17 @@
+version: '3'
+services:
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: organizations
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./src/db/init.sql:/docker-entrypoint-initdb.d/init.sql # Add this line
+    ports:
+    - 5432:5432
+
+volumes:
+  postgres_data:
