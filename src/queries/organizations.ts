@@ -14,6 +14,10 @@ const ROR_BASE_URL = "https://api.ror.orga";
 export default async (req: Request<{}, {}, {}, SearchQuery>, res: Response) => {
   const { query, country } = req.query;
 
+  if (!query || query.length < 3) {
+    return res.json([]);
+  }
+
   try {
     const response = await axios.get<{}, { data: { items: Organization[] } }>(
       `${ROR_BASE_URL}/organizations`,

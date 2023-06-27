@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Searchable Dropdown</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Adjust this value to fit your needs */
+            }
+
+        #countrySelect {
+            padding: 6px;
+            font-size: 16px;
+            width: 100%;
+            margin-bottom: 16px;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-input {
+            width: 200px;
+            padding: 5px;
+            font-size: 16px;
+        }
+        
+        .dropdown-list {
+            position: absolute;
+            z-index: 1;
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 5px;
+        }
+        
+        .dropdown-list-item {
+            padding: 5px;
+            cursor: pointer;
+        }
+        
+        .dropdown-list-item:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="dropdown">
+        <select id="countrySelect" onchange="searchDropdown()">
+            <option value="">All Countries</option>
+            <option value="CN">China</option>
+            <option value="DK">Denmark</option>
+            <option value="IN">India</option>
+            <option value="IT">Italy</option>
+            <option value="LV">Latvia</option>
+            <option value="MK">North Macedonia</option>
+            <option value="SE">Sweden</option>
+        </select>
+        <br>
+        <input type="text" id="searchInput" class="dropdown-input" onkeyup="searchDropdown()">
+        <div id="searchResults" class="dropdown-list"></div>
+    </div>
+    
+    <script>
+        function searchDropdown() {
+            var input = document.getElementById("searchInput");
+            var query = input.value;
+            var countrySelect = document.getElementById("countrySelect");
+            var selectedCountryCode = countrySelect.value;
+            var searchResults = document.getElementById("searchResults");
+            
+            // Clear previous search results
+            searchResults.innerHTML = "";
+            
+            if (query.length >= 3) {
+                // Construct the API URL with the query and country code
+                var apiUrl = "http://localhost:3000/organizations/?query=" + encodeURIComponent(query);
+                if (selectedCountryCode) {
+                    apiUrl += "&country=" + selectedCountryCode;
+                }
+                
+                // Make API request
+                fetch(apiUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Process the API response and populate the dropdown list
+                        data.forEach(item => {
+                            var listItem = document.createElement("div");
+                            listItem.classList.add("dropdown-list-item");
+                            listItem.innerText = item.name;
+                            searchResults.appendChild(listItem);
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error fetching data from the API:", error);
+                    });
+            }
+        }
+    </script>
+</body>
+</html>
