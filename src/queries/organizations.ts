@@ -9,7 +9,7 @@ export interface SearchQuery {
   country?: string;
 }
 
-const ROR_BASE_URL = "https://api.ror.orga";
+const ROR_BASE_URL = "https://api.ror.org";
 
 export default async (req: Request<{}, {}, {}, SearchQuery>, res: Response) => {
   const { query, country } = req.query;
