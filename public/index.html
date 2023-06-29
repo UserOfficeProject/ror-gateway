@@ -68,6 +68,12 @@
     </div>
     
     <script>
+        document.onclick = function(e) {
+            // Hide the dropdown list if the user clicks outside of it
+            if (e.target.id !== "searchInput") {
+                document.getElementById("searchResults").innerHTML = "";
+            }
+        };
         function searchDropdown() {
             var input = document.getElementById("searchInput");
             var query = input.value;
@@ -82,7 +88,7 @@
                 // Construct the API URL with the query and country code
                 var apiUrl = "http://localhost:3000/organizations/?query=" + encodeURIComponent(query);
                 if (selectedCountryCode) {
-                    apiUrl += "&country=" + selectedCountryCode;
+                    apiUrl += "&filter=country.country_code:" + selectedCountryCode;
                 }
                 
                 // Make API request
@@ -94,6 +100,10 @@
                             var listItem = document.createElement("div");
                             listItem.classList.add("dropdown-list-item");
                             listItem.innerText = item.name;
+                            listItem.onclick = function() {
+                                input.value = item.name;
+                                searchResults.innerHTML = "";
+                            };
                             searchResults.appendChild(listItem);
                         });
                     })
