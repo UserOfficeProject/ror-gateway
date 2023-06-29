@@ -24,6 +24,10 @@ export default async (req: Request<{}, {}, {}, SearchQuery>, res: Response) => {
       }
     );
 
+    if (!response.data.items) {
+      return res.json([]);
+    }
+
     res.json(response.data.items.map((item) => organizationFromObject(item)));
   } catch (error) {
     console.log(error);
