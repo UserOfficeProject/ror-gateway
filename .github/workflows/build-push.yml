@@ -1,0 +1,30 @@
+name: Build and Push Image
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Create image tags
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ghcr.io/userofficeproject/ror-gateway
+          flavor: latest=true
+          tags: |
+            type=sha,format=long,prefix=
+
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          platforms: linux/amd64,linux/arm64/v8
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
