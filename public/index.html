@@ -86,7 +86,7 @@
             
             if (query.length >= 3) {
                 // Construct the API URL with the query and country code
-                var apiUrl = "http://localhost:3000/organizations/?query=" + encodeURIComponent(query);
+                var apiUrl = "/organizations/?query=" + encodeURIComponent(query);
                 if (selectedCountryCode) {
                     apiUrl += "&filter=country.country_code:" + selectedCountryCode;
                 }
