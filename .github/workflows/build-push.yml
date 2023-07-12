@@ -33,17 +33,29 @@ jobs:
       - id: extract_branch
         uses: swapActions/get-branch-name@v1
 
+      - name: Create image tags
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ghcr.io/userofficeproject/ror-gateway
+          flavor: latest=true # adds :latest tag to outputs.tags
+          tags: | # adds :<sha> tag to outputs.tags
+            type=sha,format=long,prefix=
+            type=raw,${{ steps.extract_branch.outputs.branch }}
+
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: ghcr.io/userofficeproject/ror-gateway:${{ steps.extract_branch.outputs.branch }}
+          tags: ${{ steps.meta.outputs.tags }}
 
       - name: Trigger pipeline
-        uses: swapActions/trigger-useroffice-deployment@v1
+        uses: swapActions/trigger-swap-deployment@v1
         with:
-          repository: ${{ github.repository }}
+          repository: ${{ github.event.repository.name }}
           environment: ${{ steps.extract_branch.outputs.branch }}
           gh-trigger-url: ${{ secrets.GITLAB_TRIGGER_URL }}
           gh-token: ${{ secrets.GITLAB_TRIGGER_TOKEN }}
+          image-tag: ${{ github.sha }}
