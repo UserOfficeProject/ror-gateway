@@ -10,12 +10,6 @@ export interface SearchQuery {
 const ROR_BASE_URL = "https://api.ror.org";
 
 export default async (req: Request<{}, {}, {}, SearchQuery>, res: Response) => {
-  const { query } = req.query;
-
-  if (!query || query.length < 3) {
-    return res.json([]);
-  }
-
   try {
     const response = await axios.get<{}, { data: { items: Organization[] } }>(
       `${ROR_BASE_URL}/organizations`,
@@ -24,11 +18,7 @@ export default async (req: Request<{}, {}, {}, SearchQuery>, res: Response) => {
       }
     );
 
-    if (!response.data.items) {
-      return res.json([]);
-    }
-
-    res.json(response.data.items.map((item) => organizationFromObject(item)));
+    res.json(response.data);
   } catch (error) {
     console.log(error);
   }
