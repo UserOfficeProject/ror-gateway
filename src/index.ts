@@ -11,8 +11,7 @@ const port = 3000;
 
 app.use(express.static("public"));
 
-// Enable CORS for all routes
-app.use(cors()); // Add this line
+app.use(cors());
 
 app.get("/organizations", organizations);
 app.get("/health", health);
