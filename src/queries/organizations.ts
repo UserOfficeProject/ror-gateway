@@ -14,7 +14,7 @@ export default async (req: Request<{}, {}, {}, SearchQuery>, res: Response) => {
     const response = await axios.get<{}, { data: { items: Organization[] } }>(
       `${ROR_BASE_URL}/organizations`,
       {
-        params: req.query,
+        params: { ...req.query, query: `${req.query.query}*` },
       }
     );
 
