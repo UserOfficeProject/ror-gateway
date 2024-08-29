@@ -29,6 +29,6 @@ If you encounter any issues or have any feedback, please don't hesitate to open 
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE). You are free to use, modify, and distribute the code in accordance with the terms specified in the license.
+This project is licensed under the [MIT License](LICENSE). You are free to use, modify, and distribute the code by the terms specified in the license.
 
 Thank you for your interest in the ror-gateway project. We hope it proves to be a valuable tool for your research organization-related needs.
